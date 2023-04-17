@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { QuestionAnswer } from '../QuestionAnswer'
 
 import { Button } from '../Button'
+import { Result } from '../Result'
+import { ProgressBar } from '../ProgressBar'
 
 import S from './styles.module.css'
-import { Result } from '../Result'
+
 
 const QUESTIONS = [
   {
@@ -39,6 +41,9 @@ export function Quiz () {
   const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState(false)
   const [isTakingQuiz, setIsTakingQuiz] = useState(true)
 
+  const currentQuestionNumber = currentQuestionIndex + 1
+  const quizSize = QUESTIONS.length
+
   const handleAnswerQuestion = (event, question, answer) => {
     if (isCurrentQuestionAnswered) {
       return
@@ -57,7 +62,7 @@ export function Quiz () {
   }
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex + 1 < QUESTIONS.length) {
+    if (currentQuestionNumber < quizSize) {
       setCurrentQuestionIndex(index => index + 1)
     } else {
       setIsTakingQuiz(false)
@@ -72,7 +77,6 @@ export function Quiz () {
     setCurrentQuestionIndex(0)
   }
 
-  const quizSize = QUESTIONS.length
   const currentQuestion = QUESTIONS[currentQuestionIndex]
   const navigationButtonText = currentQuestionIndex + 1 === quizSize ? 'Ver Resultado' : 'Próxima Pergunta'
 
@@ -81,8 +85,12 @@ export function Quiz () {
       <div className={S.card}>
         {isTakingQuiz ? (
           <div className={S.quiz}>
+            <ProgressBar size={quizSize} currentStep={currentQuestionNumber} />
+
             <header className={S.quizHeader}>
-              <span className={S.questionCount}>PERGUNTA 1/3</span>
+              <span className={S.questionCount}>
+                PERGUNTA {currentQuestionNumber}/{quizSize}
+              </span>
               <p className={S.question}>
                 {currentQuestion.question}
               </p>
