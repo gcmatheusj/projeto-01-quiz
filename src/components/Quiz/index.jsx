@@ -4,9 +4,9 @@ import { QuestionAnswer } from '../QuestionAnswer'
 import { Button } from '../Button'
 import { Result } from '../Result'
 import { ProgressBar } from '../ProgressBar'
+import { Test } from '../Test'
 
 import S from './styles.module.css'
-
 
 const QUESTIONS = [
   {
