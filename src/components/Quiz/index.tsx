@@ -1,14 +1,20 @@
-import { useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import { QuestionAnswer } from '../QuestionAnswer'
 
 import { Button } from '../Button'
 import { Result } from '../Result'
 import { ProgressBar } from '../ProgressBar'
-import { Test } from '../Test'
 
 import S from './styles.module.css'
 
-const QUESTIONS = [
+export interface Question {
+  id: number
+  question: string
+  answers: string[]
+  correctAnswer: string
+}
+
+const QUESTIONS: Question[] = [
   {
     id: 1,
     question: 'Qual é o meu nome?',
@@ -36,15 +42,19 @@ const QUESTIONS = [
 ]
 
 export function Quiz () {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [correctAnswersCount, setCorrectAnswersCount] = useState(0)
-  const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState(false)
-  const [isTakingQuiz, setIsTakingQuiz] = useState(true)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0)
+  const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0)
+  const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState<boolean>(false)
+  const [isTakingQuiz, setIsTakingQuiz] = useState<boolean>(true)
 
   const currentQuestionNumber = currentQuestionIndex + 1
   const quizSize = QUESTIONS.length
 
-  const handleAnswerQuestion = (event, question, answer) => {
+  const handleAnswerQuestion = (
+    event: MouseEvent<HTMLButtonElement>,
+    question: Question,
+    answer: string
+  ): void => {
     if (isCurrentQuestionAnswered) {
       return
     }
