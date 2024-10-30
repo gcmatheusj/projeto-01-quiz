@@ -11,4 +11,8 @@
   font-size: 14px;
   padding: 0 20px;
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }

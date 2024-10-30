@@ -32,19 +32,14 @@ const QUESTIONS: Question[] = [
     question: 'O que eu sou?',
     answers: ['Desenvolvedor', 'Médico', 'Eletricista', 'Jogador de Futebol'],
     correctAnswer: 'Desenvolvedor'
-  },
-  {
-    id: 4,
-    question: 'Quem é Daniel?',
-    answers: ['Homem de ferro', 'Super man', 'Homem aranha', 'Homem formiga'],
-    correctAnswer: 'Homem formiga'
-  },
+  }
 ]
 
 export function Quiz () {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0)
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0)
   const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState<boolean>(false)
+  const [isCurrentQuestionCorrect, setIsCurrentQuestionCorrect] = useState<boolean>(false)
   const [isTakingQuiz, setIsTakingQuiz] = useState<boolean>(true)
 
   const currentQuestionNumber = currentQuestionIndex + 1
@@ -55,10 +50,6 @@ export function Quiz () {
     question: Question,
     answer: string
   ): void => {
-    if (isCurrentQuestionAnswered) {
-      return
-    }
-
     const isCorrectAnswer = question.correctAnswer === answer
 
     const resultClassName = isCorrectAnswer ? S.correct : S.incorrect
@@ -66,6 +57,7 @@ export function Quiz () {
 
     if (isCorrectAnswer) {
       setCorrectAnswersCount(correctAnswersCount + 1)
+      setIsCurrentQuestionCorrect(true)
     }
 
     setIsCurrentQuestionAnswered(true)
@@ -79,6 +71,7 @@ export function Quiz () {
     }
 
     setIsCurrentQuestionAnswered(false)
+    setIsCurrentQuestionCorrect(false)
   }
 
   const handleTryAgain = () => {
@@ -101,9 +94,9 @@ export function Quiz () {
               <span className={S.questionCount}>
                 PERGUNTA {currentQuestionNumber}/{quizSize}
               </span>
-              <p className={S.question}>
+              <h1 className={S.question}>
                 {currentQuestion.question}
-              </p>
+              </h1>
             </header>
 
             <ul className={S.answers}>
@@ -112,11 +105,18 @@ export function Quiz () {
                   <QuestionAnswer 
                     answer={answer} 
                     question={currentQuestion}
+                    disabled={isCurrentQuestionAnswered}
                     handleAnswerQuestion={handleAnswerQuestion}
                   />
                 </li>
               ))}
             </ul>
+
+            {isCurrentQuestionAnswered && (
+              <h2 className={S.result}>
+                {isCurrentQuestionCorrect ? 'Resposta Correta!' : 'Resposta Incorreta!'}
+              </h2>
+            )}
 
             {isCurrentQuestionAnswered && (
               <Button onClick={handleNextQuestion}>
